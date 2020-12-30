@@ -15,18 +15,17 @@ const SessionProvider = ({ children }) => {
   }
   useEffect(() => {
     const unsubscribeFromAuth = auth.onChange(async userAuth => {
-      // if (userAuth) {
-      //   let userRef = await auth.createUserProfile(userAuth)
-      //   userRef.onSnapshot(snapshot => {
-      //     setUser({
-      //       id: userAuth.uid,
-      //       ...snapshot.data(),
-      //     })
-      //   })
-      // } else {        
-        console.log(userAuth)
+      if (userAuth) {
+        let userRef = await auth.createUserProfile(userAuth)
+        userRef.onSnapshot(snapshot => {
+          setUser({
+            id: userAuth.uid,
+            ...snapshot.data(),
+          })
+        })
+      } else {                
         setUser(userAuth)
-      // }
+      }
         setStatus("restored")
     })
     return () => unsubscribeFromAuth()

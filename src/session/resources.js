@@ -7,5 +7,5 @@ export default {
   signUp : (email, password) => firebase.auth.createUserWithEmailAndPassword(email, password) , 
   signOut : () => firebase.auth.signOut(),
   onChange: callback => firebase.auth.onAuthStateChanged(callback),
-  // createUserProfile : (userAuth, additionalData=null) => createUserProfileDocument(userAuth, additionalData)
+  createUserProfile : (userAuth, additionalData=null) => firebase.createUserProfile(userAuth,additionalData)
 }

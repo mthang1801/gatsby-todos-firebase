@@ -1,10 +1,15 @@
 import React from 'react'
 import {Provider as SessionProvider} from "../session"
+import {Provider as TodosProvider} from "../todos"
 import "./styles.css"
+import Loader from "../UI/structure/loader/loader.component"
 const App = ({children}) => {
+  if( typeof window === "undefined") return <Loader/>; 
   return (
     <SessionProvider>
-      {children}
+      <TodosProvider>
+        {children}
+      </TodosProvider>      
     </SessionProvider>
   )
 }

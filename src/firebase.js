@@ -1,4 +1,4 @@
-import firebase from "firebase/app";
+import firebase, { firestore } from "firebase/app";
 
 import "firebase/auth";
 import "firebase/firestore";
@@ -17,8 +17,27 @@ export default new Proxy(
       },
       get facebook(){
         return new firebase.auth.FacebookAuthProvider();
-      }
+      }      
     },
+    async createUserProfile(userAuth, additionalData=null){
+      if(!userAuth) return ;
+      const userRef = this.database.doc(`users/${userAuth.uid}`);
+      const snapShot = await userRef.get();
+      if(!snapShot.exists){
+        const {displayName, email} = userAuth; 
+        try {
+          await userRef.set({
+            displayName : displayName || email.split("@")[0],
+            email,
+            ...additionalData,
+            createdAt : new Date().toLocaleString()
+          })
+        } catch (error) {
+          console.log("Creating user error: " + error.message)
+        }        
+      }
+      return userRef;
+    }
   },
   {
     get: function(target, name) {
