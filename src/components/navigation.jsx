@@ -1,8 +1,8 @@
 import React from "react"
 import styled from "styled-components"
 import navigation from "../constants/navigation"
-import { Link } from "gatsby"
 import classNames from "classnames"
+import AniLink from "gatsby-plugin-transition-link/AniLink"
 const Navigation = ({ className }) => {
   const url = typeof window === "undefined" ? "" : window.location.pathname
   return (
@@ -10,7 +10,8 @@ const Navigation = ({ className }) => {
       <ul className="list">
         {navigation.map(nav => (
           <li key={nav.name} className="list-item">
-            <Link
+            <AniLink
+              fade
               className={classNames("list-link", {
                 active:
                   nav.path === "/"
@@ -22,7 +23,7 @@ const Navigation = ({ className }) => {
               to={nav.path}
             >
               <span className="link-icon">{nav.icon()}</span> {nav.name}
-            </Link>
+            </AniLink>
           </li>
         ))}
       </ul>

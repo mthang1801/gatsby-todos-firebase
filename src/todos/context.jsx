@@ -8,9 +8,9 @@ const TodosProvider = ({children}) => {
   const [status, setStatus] = useState("pending") //enum = ["pending", "resolved", "rejected"];
   const [todos, setTodos] = useState([]);
   const state = {todos};
-  const add = (todo) => api.add(user.uid, todo);
-  const remove = todoId => api.remove(user.uid, todoId)
-  const update = todo => api.update(user.uid, todo);
+  const add = (todo) => api.add(user.id, todo);
+  const remove = todoId => api.remove(user.id, todoId)
+  const update = todo => api.update(user.id, todo);
   const actions = {add, remove, update}
   useEffect(()=> {
     if(user.id){

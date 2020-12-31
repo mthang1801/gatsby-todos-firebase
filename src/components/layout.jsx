@@ -12,6 +12,7 @@ const Layout = ({children, className}, props) => {
       </section>
       <section className={`main-contents-section ${openSidebar ? "elastic" : ""}`}>
         <MenuButton className={`menu-button ${openSidebar ? "hide" : ""}`} onClick={() => setOpenSidebar(true)}/>
+        {openSidebar && <div className="overlay"></div>}
         <div className="main-contents">
           {children}
         </div>          
@@ -24,33 +25,50 @@ const Layout = ({children, className}, props) => {
 export default styled(Layout)`  
   display : flex ; 
   min-height : 100vh;
-  with : 100vw; 
+  width : 100vw; 
   overflow : hidden ;
+  position : relative; 
   .sidebar-section{
+    position : absolute; 
+    left : 0;     
     width : 0;
+    height : 100% ; 
     visibility : hidden;   
     opacity : 0;
     transition : var(--transition)  ;    
   }
+
+  .main-contents-section{ 
+    width : 80vw; 
+    margin : 0 auto; 
+    padding: 4rem 0 ;          
+  }
+
   .open{
-    width : 320px !important;
+    width : 320px ;
     visibility : visible; 
     opacity : 1;  
-    z-index : 1 ;
+    z-index : 2 ;
+  }
+  .elastic{   
+    z-index : 0;   
   }
   .hide{
     opacity : 0 ; 
     visibility : hidden ;     
   }
-  .elastic{
-    // margin-left: 320px;
-    float : right ;
-    width : calc(100% - 320px);    
+  .overlay{
+    position : fixed; 
+    left : 0; 
+    right : 0 ;
+    top : 0; 
+    bottom : 0 ; 
+    background : var(--dark);    
+    opacity : 0.7;
+    z-index : 1 ;
   }
-  .main-contents-section{
-    width : 100% ;
-    padding: 4rem 0 ;  
-  }
+ 
+  
   .main-contents{
     width : 100% ;         
   }
@@ -62,24 +80,32 @@ export default styled(Layout)`
     transition-delay : var(--transition-delay);
     z-index: 0;
   }
+ 
   @media screen and (min-width:768px){
-    .main-contents{
-      width : 600px;
-      margin :auto;
+    .overlay{
+      position : unset;
+    }
+    .main-contents-section{
+      max-width : 600px;
+      margin : 0 auto;
+    }    
+    .elastic{
+      width : calc(100% - 320px); 
+      margin-left :320px;
     }
   }
   @media screen and (min-width:992px){    
-    .main-contents{
+    .main-contents-section{
       width : 90%;
       max-width : 1000px;
-      margin:auto;
+      margin:0 auto;
     }
     .open{
       width : 25% ; 
     }
-    .elastic{
-      // margin-left: 25%;
-      width : 75%;    
+    .elastic{     
+      width : 75%;  
+      margin-left : 25% ;  
     }
   }
 `
