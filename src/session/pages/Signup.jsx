@@ -15,7 +15,7 @@ import Button from "../../UI/control/Button"
 import CustomInput from "../../UI/control/custom-input/custom-input.component";
 import ButtonLoginGoogle from "../../UI/control/ButtonLoginGoogle";
 import ButtonLoginFacebook from "../../UI/control/ButtonLoginFacebook";
-import Loader from "../../UI/structure/loader/loader.component"
+import Loader from "../../UI/structure/loader"
 const INITIAL_STATE = {
   controls: {
     name: {

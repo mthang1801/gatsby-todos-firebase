@@ -1,3 +1,4 @@
+import React from 'react'
 import styled from "styled-components"
 
 export const LoaderWrapper = styled.div`
@@ -34,3 +35,12 @@ export const Spinner = styled.div`
     }
   }
 `
+const Loader = () => {
+  return (
+    <LoaderWrapper>      
+      <Spinner/>
+    </LoaderWrapper>
+  )
+}
+
+export default Loader

@@ -15,7 +15,7 @@ import CustomInput from "../../UI/control/custom-input/custom-input.component"
 import Button from "../../UI/control/Button"
 import ButtonLoginFacebook from "../../UI/control/ButtonLoginFacebook"
 import ButtonLoginGoogle from "../../UI/control/ButtonLoginGoogle"
-import Loader from "../../UI/structure/loader/loader.component"
+import Loader from "../../UI/structure/loader"
 class SignIn extends React.Component {
   constructor(props) {
     super(props)

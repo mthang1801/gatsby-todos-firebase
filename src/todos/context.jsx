@@ -1,6 +1,6 @@
 import React, {useState, createContext, useEffect} from 'react'
 import api from "./resources";
-import Loader from "../UI/structure/loader/loader.component"
+import Loader from "../UI/structure/loader"
 import {useUser} from "../session"
 const TodosContext = createContext({});
 const TodosProvider = ({children}) => {
