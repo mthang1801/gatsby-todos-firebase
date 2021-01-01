@@ -11,20 +11,20 @@ const TodosProvider = ({children}) => {
   const add = (todo) => api.add(user.id, todo);
   const remove = todoId => api.remove(user.id, todoId)
   const update = todo => api.update(user.id, todo);
-  const actions = {add, remove, update}
-  useEffect(()=> {
-    if(user.id){
-      api.onChange(user.id, todos=> {
-        setTodos(todos)
-        setStatus("resolved")
-      } )
-    }
-    
-    return () => setStatus("pending");
-  }, [user.id])
+  const updateComplete = todo => api.updateComplete(user.id, todo);
+  const actions = {add, remove, update, updateComplete}
+  const database = {database : api.database}
+  useEffect(()=> {      
+    const unsubscribe = api.onChange(user.id, todos => {
+      setTodos(todos);
+      setStatus("resolved");
+    })
+    return () => unsubscribe();
+  }, [user.id])  
+  
   if(status==="pending") return <Loader/>
   return (
-    <TodosContext.Provider value={{state,actions}}>
+    <TodosContext.Provider value={{state,actions, database}}>
       {children}
     </TodosContext.Provider>
   )

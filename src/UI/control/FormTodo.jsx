@@ -6,52 +6,68 @@ import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import { useTodoActions } from "../../todos"
 import Loader from "../structure/loader"
-import {navigate} from "gatsby"
-const FormAddTodo = ({ className }) => {
+import { navigate } from "gatsby"
+const FormAddTodo = ({ updateData, className, onClose }) => {
   const [data, setData] = useState({
     tags: [],
-    name: "",
+    title: "",
     description: "",
     todoType: "private", //["private", "group"]
     content: "",
     startDate: new Date(),
     endDate: new Date(new Date().getTime() + 84600 * 1000 * 7), // 7days})
   })
-
- 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-  const { add } = useTodoActions()
-  const handleChange = e => {   
+  const { add, update } = useTodoActions(); 
+  const handleChange = e => {
     let name = e.target.name
     let value = e.target.value
-
-      setData(prevState => ({ ...prevState, [name]: value }))
-    
-  
+    setData(prevState => ({ ...prevState, [name]: value }))
   }
   useEffect(() => {
-    let _render = true;
-    if(_render){
-      if (loading === false) {
+    let _render = true
+    if (_render) {
+      if (loading === false ) {
         setData({
           tags: [],
-          name: "",
+          title: "",
           description: "",
           todoType: "private", //["private", "group"]
           content: "",
+          status: false,
           startDate: new Date(),
           endDate: new Date(new Date().getTime() + 84600 * 1000 * 7), // 7days})
-        })      
+        })
       }
     }
-    return () => _render = false ;
+    return () => {
+      _render = false ;
+      setLoading(false);
+    }
   }, [loading])
+  useEffect(() => {
+    let _render = true;
+    if(_render){
+      if(updateData){          
+        updateData.startDate =   new Date(updateData.startDate.seconds*1000)
+        updateData.endDate = new Date(updateData.endDate.seconds*1000)  
+        setData(updateData)
+      }
+    }
+    return () => _render = false;
+  }, [updateData])
   const handleSubmit = async e => {
     e.stopPropagation()
     e.preventDefault()
     setLoading(true)
-    setError("");
+    if(updateData){
+      await update(data);      
+      setLoading(false);
+      onClose()
+      return;
+    }
+    setError("")
     try {
       await add(data)
       navigate("/")
@@ -61,18 +77,18 @@ const FormAddTodo = ({ className }) => {
 
     setLoading(false)
   }
-  console.log(data.todoType)
+  
   return (
     <form className={className} onSubmit={e => e.preventDefault()}>
       {loading && <Loader />}
       {error && <p className="error">{error}</p>}
       <div className="form-group">
-        <label htmlFor="name">Tiêu đề (tên công việc): </label>
+        <label htmlFor="title">Tiêu đề (tên công việc): </label>
         <input
           className="form-control"
-          name="name"
-          id="name"
-          value={data.name}
+          name="title"
+          id="title"
+          value={data.title}
           onChange={handleChange}
         />
       </div>
@@ -96,7 +112,7 @@ const FormAddTodo = ({ className }) => {
               id="private"
               className="form-check"
               value="private"
-              checked={data.todoType==="private"}
+              checked={data.todoType === "private"}
               onChange={handleChange}
             />
             <label htmlFor="private">Cá nhân</label>
@@ -108,14 +124,16 @@ const FormAddTodo = ({ className }) => {
               id="group"
               className="form-check"
               value="group"
-              checked={data.todoType==="group"}
+              checked={data.todoType === "group"}
               onChange={handleChange}
             />
             <label htmlFor="group">Nhóm</label>
           </div>
         </div>
       </div>
-      <div className={`form-group hide ${data.todoType === "group" ? "show" : "" }`}>
+      <div
+        className={`form-group hide ${data.todoType === "group" ? "show" : ""}`}
+      >
         <label html="members-list">Thành viên nhóm: </label>
         <TagsInput
           tags={data.tags}
@@ -137,7 +155,7 @@ const FormAddTodo = ({ className }) => {
       <div className="form-group">
         <label htmlFor="start-date">Ngày bắt đầu: </label>
         <DatePicker
-          selected={data.startDate}
+          selected={data.startDate || new  Date()}
           onChange={date =>
             setData(prevState => ({ ...prevState, startDate: date }))
           }
@@ -148,9 +166,9 @@ const FormAddTodo = ({ className }) => {
       <div className="form-group">
         <label htmlFor="end-date">Ngày dự kiến hoàn thành: </label>
         <DatePicker
-          selected={data.endDate}
+          selected={data.endDate || new Date()}
           onChange={date =>
-            setData(prevState => ({ ...prevState, startDate: date }))
+            setData(prevState => ({ ...prevState, endDate: date }))
           }
           dateFormat="dd/MM/yyyy"
           className="date-picker"
@@ -158,7 +176,7 @@ const FormAddTodo = ({ className }) => {
       </div>
       <div className="text-center">
         <Button type="button" onClick={handleSubmit}>
-          Tạo mới
+          {updateData ?"Lưu thay đổi" : "Tạo mới"}
         </Button>
       </div>
     </form>
@@ -171,8 +189,8 @@ export default styled(FormAddTodo)`
   input[type="date"] {
     font-family: "Roboto", sans-serif;
   }
-  .error{
-    color : var(--danger);
+  .error {
+    color: var(--danger);
   }
   .react-datepicker-wrapper {
     input {
@@ -186,16 +204,16 @@ export default styled(FormAddTodo)`
       }
     }
   }
-  .hide{
-    visibility : hidden ; 
-    opacity : 0;
-    transition : var(--transition);
-    height : 0; 
+  .hide {
+    visibility: hidden;
+    opacity: 0;
+    transition: var(--transition);
+    height: 0;
   }
-  .show{
-    visibility : visible;  
+  .show {
+    visibility: visible;
     height: auto;
-    opacity : 1 ;
+    opacity: 1;
   }
   textarea {
     padding: 1rem;

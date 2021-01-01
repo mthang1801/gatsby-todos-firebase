@@ -1,7 +1,7 @@
 import React from 'react'
 import Title from "../components/title"
 import Layout from "../components/layout"
-import FormAddTodo from "../UI/control/FormAddTodo";
+import FormAddTodo from "../UI/control/FormTodo";
 
 const Add = () => { 
   return (

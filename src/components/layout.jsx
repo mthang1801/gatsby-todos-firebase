@@ -26,7 +26,7 @@ export default styled(Layout)`
   display : flex ; 
   min-height : 100vh;
   width : 100vw; 
-  overflow : hidden ;
+  overflow : auto ;
   position : relative; 
   .sidebar-section{
     position : absolute; 
@@ -34,14 +34,15 @@ export default styled(Layout)`
     width : 0;
     height : 100% ; 
     visibility : hidden;   
-    opacity : 0;
-    transition : var(--transition)  ;    
+    opacity : 0;    
+    transition : var(--transition)  ;        
   }
 
   .main-contents-section{ 
+    position : relative;
     width : 80vw; 
     margin : 0 auto; 
-    padding: 4rem 0 ;          
+    padding: 4rem 0 ;                
   }
 
   .open{
@@ -70,7 +71,7 @@ export default styled(Layout)`
  
   
   .main-contents{
-    width : 100% ;         
+    width : 100% ;             
   }
   .menu-button{
     position : fixed; 
@@ -97,7 +98,7 @@ export default styled(Layout)`
   @media screen and (min-width:992px){    
     .main-contents-section{
       width : 90%;
-      max-width : 1000px;
+      max-width : unset;    
       margin:0 auto;
     }
     .open{
